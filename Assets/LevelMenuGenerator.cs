@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class LevelMenuGenerator : MonoBehaviour
@@ -5,6 +6,8 @@ public class LevelMenuGenerator : MonoBehaviour
     [SerializeField] private int lvlcount;
     [SerializeField] private GameObject buttonPrefab;
     [SerializeField] private Transform root;
+    [SerializeField] private int[] lvlStars;
+    [SerializeField] private int OpenlvlCount;
     private void Awake()
     {
         ClearRoot();
@@ -14,7 +17,18 @@ public class LevelMenuGenerator : MonoBehaviour
     {
         for (int i = 0; i < lvlcount; i++)
         {
-            Instantiate(buttonPrefab, root);
+            var ins = Instantiate(buttonPrefab, root);
+            if (ins.TryGetComponent(out LevelButton btn))
+            {
+                if (i <= OpenlvlCount)
+                {
+                    btn.Init(i + 1, lvlStars[i], false);
+                }
+                else
+                {
+                    btn.Init(i + 1, 0, true);
+                }
+            }
         }
         
     }
